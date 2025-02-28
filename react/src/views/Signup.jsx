@@ -1,4 +1,4 @@
-import {React, use, useRef} from 'react'
+import {React, useRef} from 'react'
 import { Link } from 'react-router-dom'
 import axiosClient from '../axios-client';
 import { useStateContext} from '../context/ContextProvider';
@@ -15,15 +15,36 @@ export default function Signup() {
     setToken,
   } = useStateContext()
 
+  
+//posting data to the server
+  async function signup(payload) {
+    try{
+      const response = await axiosClient.post('/signup', payload)
+      setUser(response.user);  
+      setToken(response.token);
+    }
+    catch(error){
+      const err = error.response
+      console.log(error)
+    }
+  }
 
+  //onSubmit function
     const onSubmit = (e) => {
       e.preventDefault()
       const payload = {
         name: nameRef.current.value, 
         email: emailRef.current.value, 
         password: passwordRef.current.value, 
-        confirmPassword: confirmPasswordRef.current.value
-  }
+        confirmPassword: confirmPasswordRef.current.value     
+      }
+      
+  signup(payload)
+  console.log(payload)
+  console.log('Form submitted')
+}
+
+/*
   axiosClient.post('/signup', payload)
     .then(({data}) => {
       setUser(data.user)
@@ -35,6 +56,7 @@ export default function Signup() {
     console.log(payload)
     console.log('Form submitted')  
 }
+*/
 
   return (
         <form onSubmit={onSubmit}>
@@ -46,7 +68,7 @@ export default function Signup() {
           <button className='btn btn-block'>Sign Up</button>
           <p className='message'>
             Already registered?<Link to='/login'>
-            Create an account
+            Login!
             </Link>            
             </p>
         </form>
