@@ -25,7 +25,9 @@ export default function Signup() {
     }
     catch(error){
       const err = error.response
-      console.log(error)
+      if(err && err.status === 422){
+        console.log(err.data.errors)
+      }
     }
   }
 
@@ -38,25 +40,11 @@ export default function Signup() {
         password: passwordRef.current.value, 
         confirmPassword: confirmPasswordRef.current.value     
       }
-      
+//Passing the payload to the signup function      
   signup(payload)
   console.log(payload)
   console.log('Form submitted')
 }
-
-/*
-  axiosClient.post('/signup', payload)
-    .then(({data}) => {
-      setUser(data.user)
-      setToken (data.token)
-    })
-    .catch(error => {
-      console.log(error)
-    })
-    console.log(payload)
-    console.log('Form submitted')  
-}
-*/
 
   return (
         <form onSubmit={onSubmit}>
